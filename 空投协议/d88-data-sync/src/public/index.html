@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DFC推荐系统监控</title>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .status-healthy {
+            color: green;
+        }
+        .status-unhealthy {
+            color: red;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>DFC推荐系统监控</h1>
+    
+    <div class="card">
+        <h2>系统健康状态</h2>
+        <button onclick="checkHealth()">刷新健康状态</button>
+        <div id="healthStatus"></div>
+    </div>
+
+    <div class="card">
+        <h2>性能统计</h2>
+        <button onclick="getStats('GET_health')">健康检查统计</button>
+        <button onclick="getStats('GET_stats')">统计接口性能</button>
+        <div id="statsResult"></div>
+    </div>
+
+    <div class="card">
+        <h2>告警历史</h2>
+        <button onclick="getAlerts()">查看所有告警</button>
+        <div id="alertsResult"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/health`);
+                const data = await response.json();
+                const healthDiv = document.getElementById('healthStatus');
+                
+                let html = `<h3 class="status-${data.status}">系统状态: ${data.status}</h3>`;
+                html += '<h4>服务状态:</h4>';
+                
+                for (const [service, status] of Object.entries(data.services)) {
+                    html += `
+                        <div>
+                            <strong>${service}:</strong> 
+                            <span class="status-${status.status}">${status.status}</span>
+                            ${status.latency ? `(延迟: ${status.latency}ms)` : ''}
+                            ${status.error ? `<br>错误: ${status.error}` : ''}
+                        </div>
+                    `;
+                }
+                
+                healthDiv.innerHTML = html;
+            } catch (error) {
+                document.getElementById('healthStatus').innerHTML = `
+                    <div class="status-unhealthy">错误: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function getStats(operationName) {
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/stats/${operationName}`);
+                const data = await response.json();
+                const statsDiv = document.getElementById('statsResult');
+                
+                let html = `
+                    <h3>操作: ${operationName}</h3>
+                    <div>平均耗时: ${data.average.toFixed(2)}ms</div>
+                    <div>总调用次数: ${data.count}</div>
+                    <h4>最近10次调用:</h4>
+                `;
+                
+                if (data.recent.length > 0) {
+                    html += '<pre>' + JSON.stringify(data.recent, null, 2) + '</pre>';
+                } else {
+                    html += '<div>暂无记录</div>';
+                }
+                
+                statsDiv.innerHTML = html;
+            } catch (error) {
+                document.getElementById('statsResult').innerHTML = `
+                    <div class="status-unhealthy">错误: ${error.message}</div>
+                `;
+            }
+        }
+
+        async function getAlerts() {
+            try {
+                const response = await fetch(`${API_BASE}/monitoring/alerts`);
+                const data = await response.json();
+                const alertsDiv = document.getElementById('alertsResult');
+                
+                let html = '';
+                for (const [service, alerts] of Object.entries(data)) {
+                    html += `
+                        <h3>${service}</h3>
+                        ${alerts.length > 0 
+                            ? '<pre>' + JSON.stringify(alerts, null, 2) + '</pre>'
+                            : '<div>暂无告警</div>'
+                        }
+                    `;
+                }
+                
+                alertsDiv.innerHTML = html;
+            } catch (error) {
+                document.getElementById('alertsResult').innerHTML = `
+                    <div class="status-unhealthy">错误: ${error.message}</div>
+                `;
+            }
+        }
+
+        // 页面加载时自动检查健康状态
+        window.onload = checkHealth;
+    </script>
+</body>
+</html> 

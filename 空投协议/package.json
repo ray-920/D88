@@ -1,0 +1,11 @@
+{
+  "description": "",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "mongoose": "^8.9.4",
+    "web3": "^4.16.0"
+  },
+  "scripts": {
+    "test:mongo": "node scripts/testMongo.js"
+  }
+}
