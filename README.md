@@ -39,8 +39,8 @@ D88 Token是一个基于ERC20标准的代币合约，集成了推荐奖励系统
 
 1. 克隆项目
 ```bash
-git clone [项目地址]
-cd d88-token
+git clone https://github.com/ray-920/D88.git
+cd D88
 ```
 
 2. 安装依赖
@@ -68,7 +68,7 @@ npx truffle migrate --network dragonfly
 
 ## 项目结构
 ```
-d88-token/
+D88/
 ├── contracts/
 │   └── D88TokenWithReferral.sol
 ├── migrations/
@@ -148,4 +148,4 @@ MIT License
 详见 [CHANGELOG.md](./CHANGELOG.md)
 
 ---
-*最后更新：2024-02-19* 
+*最后更新：2024-02-19*
