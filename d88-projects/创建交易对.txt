@@ -1,0 +1,19 @@
+测试地址：0xC56584a0A43DBc9CAFaC4068B4BFD65d2eFce0f4
+私钥：456e84d08f384caba7476eb547b546e85230c81388f25b4dc439d9b40c12f9bc
+
+address public pankFactory = 0xC63eb438F029EFd9b8Aa88664059178e72B727d7;
+address public pankRouter = 0x8863583B5b70539487276b972f9F409Cbc8DFA0A
+WDFC地址：0xf0cEDC1e9eDcA3A7f3e281d5CD74E3dB12b7F42A
+
+压岁钱地址：0x1baC58E9b504f6c8406693097852dB556e057DBa
+
+https://node.dragonfly-chain.com
+ID：920
+https://www.scandfc.com/
+
+核心需求：
+1、在DFC链上的swap里面用创建压岁钱和DFC的交易对
+2、并且用10万个压岁钱代币和1个DFC
+3、LP令牌转给创建者
+
+使用语言truffle hdwellet web3.js

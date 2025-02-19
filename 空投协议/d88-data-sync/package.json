@@ -1,0 +1,23 @@
+{
+  "name": "airdrop-calculator",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node src/scripts/start.js",
+    "init": "node src/scripts/init.js",
+    "import": "node src/scripts/import-data.js",
+    "calculate": "node src/backup/calculate-airdrop.js",
+    "all": "npm run start && npm run init && npm run import && npm run calculate"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "ioredis": "^4.28.5",
+    "mongodb": "^4.1.0",
+    "mongoose": "^8.9.4",
+    "web3": "^1.10.4"
+  },
+  "description": "本项目用于同步区块链推广协议数据到MongoDB和Redis，并计算用户奖励分配。",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
